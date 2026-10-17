@@ -1,0 +1,37 @@
+name: Deploy to Development
+
+on:
+  push:
+    branches: [dev]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH (Git Pull + Build + PM2 Restart)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEV_HOST }}
+          username: ${{ secrets.DEV_USER }}
+          key: ${{ secrets.DEV_KEY }}
+          port: 22
+          script: |
+            export NVM_DIR="$HOME/.nvm"
+            source "$NVM_DIR/nvm.sh"
+            nvm use 22
+
+            cd ${{ secrets.DEV_PATH }}
+
+            echo "🔄 Pulling latest changes..."
+            git pull origin dev
+
+            echo "📦 Installing dependencies..."
+            npm ci
+
+            echo "🏗️ Building app..."
+            npm run build
+
+            echo "🚀 Restarting app with PM2..."
+            pm2 reload ecosystem.config.cjs || pm2 start ecosystem.config.cjs
+            pm2 save
