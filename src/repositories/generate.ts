@@ -4,7 +4,7 @@ export function generateNumber(length: number) {
     let result = '';
     const characters = '1234567890';
     const charactersLength = characters.length;
-    for (let i = 0; i < length; i++) {
+    for (let index = 0; index < length; index++) {
         result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
 
