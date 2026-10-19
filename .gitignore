@@ -21,6 +21,11 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 *.pem
 *.key
 
+# local database
+*.sqlite
+*.sqlite3
+*.db
+
 # secrets
 secrets
 
